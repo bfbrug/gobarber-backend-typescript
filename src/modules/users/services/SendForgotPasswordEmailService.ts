@@ -14,7 +14,7 @@ interface Request {
 @injectable()
 class SendForgotPasswordEmailService {
   constructor(
-    @inject('UserRepository')
+    @inject('UsersRepository')
     private usersRepository: IUsersRepository,
 
     @inject('MailProvider')
@@ -28,12 +28,12 @@ class SendForgotPasswordEmailService {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new AppError('User does not existis.');
+      throw new AppError('User does not exists.');
     }
 
     await this.userTokensRepository.generate(user.id);
 
-    this.mailProvider.sendMail(
+    await this.mailProvider.sendMail(
       email,
       'Pedido de recuperação de senha recebido.',
     );
